@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <LinearLayout
+        android:id="@+id/ll1"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/text1"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="#0000ff"
+            android:gravity="center"
+            android:text="1"
+            android:textSize="30dp" />
+
+        <TextView
+            android:id="@+id/text2"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="10dp"
+            android:background="#0000ff"
+            android:gravity="center"
+            android:text="2"
+            android:textSize="30dp"
+            android:visibility="gone" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recy"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:overScrollMode="never"
+            android:scrollbars="none" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ll1"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/user_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="user" />
+
+        <Button
+            android:id="@+id/list_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="list" />
+
+        <Button
+            android:id="@+id/hide2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="show2" />
+
+        <Button
+            android:id="@+id/loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="loading" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ll2"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/error"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="error" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ll3"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/i_playing"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="i_playing" />
+
+        <Button
+            android:id="@+id/i_loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="i_loading" />
+
+        <Button
+            android:id="@+id/i_error"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="i_error" />
+
+    </LinearLayout>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ll4" />
+
+
+</RelativeLayout>
