@@ -129,10 +129,43 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/ll5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ll4"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/down_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="down_1" />
+
+        <Button
+            android:id="@+id/undown_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="undown_1" />
+
+        <Button
+            android:id="@+id/down_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="down_2" />
+
+        <Button
+            android:id="@+id/undown_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="undown_2" />
+
+    </LinearLayout>
+
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/ll4" />
+        android:layout_below="@+id/ll5" />
 
 
 </RelativeLayout>

@@ -32,6 +32,34 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        findViewById(R.id.down_1).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                adapter.updateDownloading(0,true);
+            }
+        });
+
+        findViewById(R.id.undown_1).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                adapter.updateDownloading(0,false);
+            }
+        });
+
+        findViewById(R.id.down_2).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                adapter.updateDownloading(1,true);
+            }
+        });
+
+        findViewById(R.id.undown_2).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                adapter.updateDownloading(1,false);
+            }
+        });
+
         findViewById(R.id.i_playing).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -160,9 +188,9 @@ public class MainActivity extends AppCompatActivity {
 
         adapter.setItemClickListener(new PubMusicAdapter.ItemClickListener() {
             @Override
-            public void onItemClick(View view, int pos, boolean isActivating, boolean isPlaying, boolean isLoading, boolean isPausing , boolean isError) {
+            public void onItemClick(View view, int pos, PubMusicState state) {
                 adapter.smoothScrollToPostion(manager, pos);
-                String log = "pos:" + pos + " | isActivating:" + isActivating + " | isPlaying:" + isPlaying + " | isLoading:" + isLoading + " | isPausing:" + isPausing + " | isError:" + isError;
+                String log = state.toString();
                 Toast.makeText(getApplicationContext(), log, Toast.LENGTH_SHORT).show();
                 Log.d("jiabin", log);
             }

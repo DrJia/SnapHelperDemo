@@ -142,7 +142,7 @@ public class PubMusicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public void clearCurrentActivatingPos() {
         int curPage = mPubMusicScrollListener.getCurrentPage();
-        if (curPage < 0 || mtotalList == null || mtotalList.isEmpty()) {
+        if (curPage < 0 || mtotalList == null || mtotalList.isEmpty() || curPage >= mtotalList.size()) {
             return;
         }
         mtotalList.get(curPage).isActivating = false;
@@ -186,50 +186,68 @@ public class PubMusicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public void updateCurrentLoading() {
         int curPage = mPubMusicScrollListener.getCurrentPage();
-        if (curPage < 0 || mtotalList == null || mtotalList.isEmpty()) {
+        if (curPage < 0 || mtotalList == null || mtotalList.isEmpty() || curPage >= mtotalList.size()) {
             return;
         }
         mtotalList.get(curPage).isLoading = true;
         mtotalList.get(curPage).isPausing = false;
         mtotalList.get(curPage).isError = false;
         mtotalList.get(curPage).isPlaying = false;
+        mtotalList.get(curPage).isDownloading = false;
         notifyItemChanged(curPage, "payload");
     }
 
     public void updateCurrentPause() {
         int curPage = mPubMusicScrollListener.getCurrentPage();
-        if (curPage < 0 || mtotalList == null || mtotalList.isEmpty()) {
+        if (curPage < 0 || mtotalList == null || mtotalList.isEmpty() || curPage >= mtotalList.size()) {
             return;
         }
         mtotalList.get(curPage).isLoading = false;
         mtotalList.get(curPage).isPausing = true;
         mtotalList.get(curPage).isError = false;
         mtotalList.get(curPage).isPlaying = false;
+        mtotalList.get(curPage).isDownloading = false;
         notifyItemChanged(curPage, "payload");
     }
 
     public void updateCurrentError() {
         int curPage = mPubMusicScrollListener.getCurrentPage();
-        if (curPage < 0 || mtotalList == null || mtotalList.isEmpty()) {
+        if (curPage < 0 || mtotalList == null || mtotalList.isEmpty() || curPage >= mtotalList.size()) {
             return;
         }
         mtotalList.get(curPage).isLoading = false;
         mtotalList.get(curPage).isPausing = false;
         mtotalList.get(curPage).isError = true;
         mtotalList.get(curPage).isPlaying = false;
+        mtotalList.get(curPage).isDownloading = false;
         notifyItemChanged(curPage, "payload");
     }
 
     public void updateCurrentPlaying() {
         int curPage = mPubMusicScrollListener.getCurrentPage();
-        if (curPage < 0 || mtotalList == null || mtotalList.isEmpty()) {
+        if (curPage < 0 || mtotalList == null || mtotalList.isEmpty() || curPage >= mtotalList.size()) {
             return;
         }
         mtotalList.get(curPage).isLoading = false;
         mtotalList.get(curPage).isPausing = false;
         mtotalList.get(curPage).isError = false;
         mtotalList.get(curPage).isPlaying = true;
+        mtotalList.get(curPage).isDownloading = false;
         notifyItemChanged(curPage, "payload");
+    }
+
+    public void updateDownloading(int pos, boolean isDownloading) {
+        if (pos < 0 || mtotalList == null || mtotalList.isEmpty() || pos >= mtotalList.size()) {
+            return;
+        }
+        mtotalList.get(pos).isDownloading = isDownloading;
+
+        mtotalList.get(pos).isLoading = false;
+        mtotalList.get(pos).isPausing = false;
+        mtotalList.get(pos).isError = false;
+        mtotalList.get(pos).isPlaying = false;
+
+        notifyItemChanged(pos, "payload");
     }
 
     @NonNull
@@ -265,7 +283,9 @@ public class PubMusicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             }
 
             String state = "";
-            if (meta.isPlaying) {
+            if (meta.isDownloading) {//!!!
+                state = "Downloading...";
+            } else if (meta.isPlaying) {
                 state = "playing";
             } else if (meta.isLoading) {
                 state = "loading";
@@ -341,7 +361,14 @@ public class PubMusicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 mPubMusicScrollListener.setPageSelected(pos);
             }
             if (mItemClickListener != null) {
-                mItemClickListener.onItemClick(v, pos, mtotalList.get(pos).isActivating, mtotalList.get(pos).isPlaying, mtotalList.get(pos).isLoading, mtotalList.get(pos).isPausing, mtotalList.get(pos).isError);
+                PubMusicState state = new PubMusicState();
+                state.isActivating = mtotalList.get(pos).isActivating;
+                state.isPlaying = mtotalList.get(pos).isPlaying;
+                state.isLoading = mtotalList.get(pos).isLoading;
+                state.isPausing = mtotalList.get(pos).isPausing;
+                state.isError = mtotalList.get(pos).isError;
+                state.isDownloading = mtotalList.get(pos).isDownloading;
+                mItemClickListener.onItemClick(v, pos, state);
             }
         }
     }
@@ -367,7 +394,7 @@ public class PubMusicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     public interface ItemClickListener {
-        void onItemClick(View view, int pos, boolean isActivating, boolean isPlaying, boolean isLoading, boolean isPausing, boolean isError);
+        void onItemClick(View view, int pos, PubMusicState state);
 
         void onErrorClick();
 

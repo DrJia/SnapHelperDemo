@@ -8,5 +8,6 @@ public class PubMusicMeta {
     public boolean isPausing;
     public boolean isPlaying;
     public boolean isError;
+    public boolean isDownloading;
     public boolean isActivating;//激活态，代表位于第一位
 }
