@@ -110,6 +110,12 @@
             android:text="i_loading" />
 
         <Button
+            android:id="@+id/i_pausing"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="i_pausing" />
+
+        <Button
             android:id="@+id/i_error"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

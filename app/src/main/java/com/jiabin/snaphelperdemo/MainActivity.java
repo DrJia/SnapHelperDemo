@@ -46,6 +46,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        findViewById(R.id.i_pausing).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                adapter.updateCurrentPause();
+            }
+        });
+
         findViewById(R.id.i_error).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,8 +87,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 adapter.updateUserMusicMeta(getRandomUser());
-                adapter.updateActivatingPos(0);
-                adapter.smoothScrollToPostion(manager, 0);
+                //adapter.updateActivatingPos(0);
+                //adapter.smoothScrollToPostion(manager, 0);
             }
         });
 
@@ -108,8 +115,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 adapter.setRecommandList(getRandomList());
-                int curPage = mScrollChangeListener.getCurrentPage();
-                adapter.updateActivatingPos(curPage);
+                //int curPage = mScrollChangeListener.getCurrentPage();
+                //adapter.updateActivatingPos(curPage);
             }
         });
 
@@ -146,9 +153,9 @@ public class MainActivity extends AppCompatActivity {
 
         adapter.setItemClickListener(new PubMusicAdapter.ItemClickListener() {
             @Override
-            public void onItemClick(View view, int pos, boolean isActivating, boolean isPlaying, boolean isLoading, boolean isError) {
+            public void onItemClick(View view, int pos, boolean isActivating, boolean isPlaying, boolean isLoading, boolean isPausing , boolean isError) {
                 adapter.smoothScrollToPostion(manager, pos);
-                String log = "pos:" + pos + " | isActivating:" + isActivating + " | isPlaying:" + isPlaying + " | isLoading:" + isLoading + " | isError:" + isError;
+                String log = "pos:" + pos + " | isActivating:" + isActivating + " | isPlaying:" + isPlaying + " | isLoading:" + isLoading + " | isPausing:" + isPausing + " | isError:" + isError;
                 Toast.makeText(getApplicationContext(), log, Toast.LENGTH_SHORT).show();
                 Log.d("jiabin", log);
             }
@@ -178,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        adapter.setRecyclerViewWidth(mRecy.getWidth());
+        //adapter.setRecyclerViewWidth(mRecy.getWidth());
     }
 
     private ArrayList<PubMusicMeta> getRandomList() {

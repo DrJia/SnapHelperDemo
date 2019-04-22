@@ -70,6 +70,10 @@ public class PubMusicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             mtotalList.addAll(mRecList);
             notifyItemRangeChanged(1, getItemCount() - 1, "payload");
         }
+
+        int curPage = mPubMusicScrollListener.getCurrentPage();
+        updateActivatingPos(curPage);
+        mPubMusicScrollListener.setPageSelected(curPage);
     }
 
     public ArrayList<PubMusicMeta> getRecommandList() {
@@ -90,6 +94,10 @@ public class PubMusicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             mtotalList.set(0, mUserPubMusicMeta);
             notifyItemChanged(0, "payload");
         }
+
+        updateActivatingPos(0);
+        smoothScrollToPostion(mPubMusicScrollListener.getLayoutManager(), 0);
+        mPubMusicScrollListener.setPageSelected(0);
     }
 
     public PubMusicMeta getUserMusicMeta() {
@@ -101,7 +109,6 @@ public class PubMusicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             return;
         }
         mRecyclerViewWidth = width;
-        //Log.d("jiabin", "mRecyclerViewWidth:" + mRecyclerViewWidth);
         if (mItemWidth == 0) {
             mItemWidth = (int) ((mRecyclerViewWidth - 2 * mPadding) / (1 + 0.7f));// 1 : 0.7
         }
@@ -123,8 +130,9 @@ public class PubMusicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             } else {
                 mtotalList.get(i).isActivating = false;
             }
-            if(i != curPage){
+            if (i != curPage) {
                 mtotalList.get(i).isLoading = false;
+                mtotalList.get(i).isPausing = false;
                 mtotalList.get(i).isError = false;
                 mtotalList.get(i).isPlaying = false;
             }
@@ -150,43 +158,37 @@ public class PubMusicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public void updateCurrentLoading() {
         int curPage = mPubMusicScrollListener.getCurrentPage();
-        int count = mtotalList.size();
-        for (int i = 0; i < count; i++) {
-            if (i == curPage) {
-                mtotalList.get(i).isLoading = true;
-                mtotalList.get(i).isError = false;
-                mtotalList.get(i).isPlaying = false;
-                break;
-            }
-        }
+        mtotalList.get(curPage).isLoading = true;
+        mtotalList.get(curPage).isPausing = false;
+        mtotalList.get(curPage).isError = false;
+        mtotalList.get(curPage).isPlaying = false;
+        notifyItemChanged(curPage, "payload");
+    }
+
+    public void updateCurrentPause() {
+        int curPage = mPubMusicScrollListener.getCurrentPage();
+        mtotalList.get(curPage).isLoading = false;
+        mtotalList.get(curPage).isPausing = true;
+        mtotalList.get(curPage).isError = false;
+        mtotalList.get(curPage).isPlaying = false;
         notifyItemChanged(curPage, "payload");
     }
 
     public void updateCurrentError() {
         int curPage = mPubMusicScrollListener.getCurrentPage();
-        int count = mtotalList.size();
-        for (int i = 0; i < count; i++) {
-            if (i == curPage) {
-                mtotalList.get(i).isLoading = false;
-                mtotalList.get(i).isError = true;
-                mtotalList.get(i).isPlaying = false;
-                break;
-            }
-        }
+        mtotalList.get(curPage).isLoading = false;
+        mtotalList.get(curPage).isPausing = false;
+        mtotalList.get(curPage).isError = true;
+        mtotalList.get(curPage).isPlaying = false;
         notifyItemChanged(curPage, "payload");
     }
 
     public void updateCurrentPlaying() {
         int curPage = mPubMusicScrollListener.getCurrentPage();
-        int count = mtotalList.size();
-        for (int i = 0; i < count; i++) {
-            if (i == curPage) {
-                mtotalList.get(i).isLoading = false;
-                mtotalList.get(i).isError = false;
-                mtotalList.get(i).isPlaying = true;
-                break;
-            }
-        }
+        mtotalList.get(curPage).isLoading = false;
+        mtotalList.get(curPage).isPausing = false;
+        mtotalList.get(curPage).isError = false;
+        mtotalList.get(curPage).isPlaying = true;
         notifyItemChanged(curPage, "payload");
     }
 
@@ -229,6 +231,8 @@ public class PubMusicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 state = "loading";
             } else if (meta.isError) {
                 state = "error";
+            } else if (meta.isPausing) {
+                state = "pausing";
             }
             musicViewHolder.txt2.setText(state);
 
@@ -294,7 +298,7 @@ public class PubMusicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         public void onClick(View v) {
             int pos = getAdapterPosition();
             if (mItemClickListener != null) {
-                mItemClickListener.onItemClick(v, pos, mtotalList.get(pos).isActivating, mtotalList.get(pos).isPlaying, mtotalList.get(pos).isLoading, mtotalList.get(pos).isError);
+                mItemClickListener.onItemClick(v, pos, mtotalList.get(pos).isActivating, mtotalList.get(pos).isPlaying, mtotalList.get(pos).isLoading, mtotalList.get(pos).isPausing, mtotalList.get(pos).isError);
             }
         }
     }
@@ -312,7 +316,7 @@ public class PubMusicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         @Override
         public void onClick(View v) {
             if (mItemClickListener != null) {
-                if(mErrorText != null){
+                if (mErrorText != null) {
                     mItemClickListener.onErrorClick();
                 }
             }
@@ -320,7 +324,8 @@ public class PubMusicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     public interface ItemClickListener {
-        void onItemClick(View view, int pos, boolean isActivating, boolean isPlaying, boolean isLoading, boolean isError);
+        void onItemClick(View view, int pos, boolean isActivating, boolean isPlaying, boolean isLoading, boolean isPausing, boolean isError);
+
         void onErrorClick();
 
     }

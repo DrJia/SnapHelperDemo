@@ -5,6 +5,7 @@ public class PubMusicMeta {
     public String name;
     public String artist;
     public boolean isLoading;
+    public boolean isPausing;
     public boolean isPlaying;
     public boolean isError;
     public boolean isActivating;//激活态，代表位于第一位
