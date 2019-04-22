@@ -74,6 +74,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        findViewById(R.id.clear).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                adapter.clearCurrentActivatingPos();
+            }
+        });
+
         text2 = findViewById(R.id.text2);
 
         findViewById(R.id.text1).setOnClickListener(new View.OnClickListener() {
