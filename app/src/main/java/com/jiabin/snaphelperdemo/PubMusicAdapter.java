@@ -365,9 +365,6 @@ public class PubMusicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         @Override
         public void onClick(View v) {
             int pos = getAdapterPosition();
-            if (!mtotalList.get(pos).isActivating && mPubMusicScrollListener.getCurrentPage() == pos) {
-                mPubMusicScrollListener.setPageSelected(pos);
-            }
             if (mItemClickListener != null) {
                 PubMusicState state = new PubMusicState();
                 state.isActivating = mtotalList.get(pos).isActivating;
@@ -377,6 +374,9 @@ public class PubMusicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 state.isError = mtotalList.get(pos).isError;
                 state.isDownloading = mtotalList.get(pos).isDownloading;
                 mItemClickListener.onItemClick(v, pos, state);
+            }
+            if (!mtotalList.get(pos).isActivating && mPubMusicScrollListener.getCurrentPage() == pos) {
+                mPubMusicScrollListener.setPageSelected(pos);
             }
         }
     }
