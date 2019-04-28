@@ -94,6 +94,12 @@
             android:layout_height="wrap_content"
             android:text="clear" />
 
+        <Button
+            android:id="@+id/reset"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="reset" />
+
     </LinearLayout>
 
     <LinearLayout

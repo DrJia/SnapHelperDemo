@@ -109,6 +109,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        findViewById(R.id.reset).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                adapter.reset();
+            }
+        });
+
         text2 = findViewById(R.id.text2);
 
         findViewById(R.id.text1).setOnClickListener(new View.OnClickListener() {

@@ -250,6 +250,14 @@ public class PubMusicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         notifyItemChanged(pos, "payload");
     }
 
+    public void reset(){
+        mRecList.clear();
+        mtotalList.clear();
+        mErrorText = null;
+        mLoadingText = null;
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
