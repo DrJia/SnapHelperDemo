@@ -96,8 +96,11 @@ public class PubMusicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
 
         updateActivatingPos(0);
-        smoothScrollToPostion(mPubMusicScrollListener.getLayoutManager(), 0);
-        mPubMusicScrollListener.setPageSelected(0);
+        if(mPubMusicScrollListener.getCurrentPage() == 0){
+            mPubMusicScrollListener.setPageSelected(0);
+        }else {
+            smoothScrollToPostion(mPubMusicScrollListener.getLayoutManager(), 0);
+        }
     }
 
     public PubMusicMeta getUserMusicMeta() {
@@ -251,6 +254,7 @@ public class PubMusicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     public void reset(){
+        mUserPubMusicMeta = null;
         mRecList.clear();
         mtotalList.clear();
         mErrorText = null;

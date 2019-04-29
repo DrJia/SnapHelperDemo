@@ -1,5 +1,7 @@
 package com.jiabin.snaphelperdemo;
 
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -173,6 +175,8 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("jiabin", "currentPos:" + currentPos + " | lastPos:" + lastPos);
                 //Toast.makeText(getApplicationContext(), "currentPos:" + currentPos + " | lastPos:" + lastPos, Toast.LENGTH_SHORT).show();
                 adapter.updateActivatingPos(currentPos);
+                adapter.updateCurrentLoading();
+                mockLoading();
             }
         });
 
@@ -249,6 +253,30 @@ public class MainActivity extends AppCompatActivity {
         PubMusicMeta meta = new PubMusicMeta();
         meta.name = num + ":自选自选自选自选自选自选自选自选";
         return meta;
+    }
+
+    private Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what){
+                case 1:
+                    adapter.updateCurrentError();
+                    break;
+            }
+        }
+    };
+    private void mockLoading(){
+        new Thread(){
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                mHandler.sendEmptyMessage(1);
+            }
+        }.start();
     }
 
 }
