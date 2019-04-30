@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearSmoothScroller;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -81,6 +82,8 @@ public class PubMusicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     public void updateUserMusicMeta(@NonNull PubMusicMeta userPubMusicMeta) {
+        boolean update;
+        int lastPage = mPubMusicScrollListener.getCurrentPage();
         if (mUserPubMusicMeta == null) {
             mUserPubMusicMeta = userPubMusicMeta;
             mtotalList.add(0, mUserPubMusicMeta);
@@ -89,17 +92,24 @@ public class PubMusicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             } else {
                 notifyItemInserted(0);
             }
+            update = false;
         } else {
             mUserPubMusicMeta = userPubMusicMeta;
             mtotalList.set(0, mUserPubMusicMeta);
             notifyItemChanged(0, "payload");
+            update = true;
         }
 
         updateActivatingPos(0);
-        if(mPubMusicScrollListener.getCurrentPage() == 0){
+//        if (mPubMusicScrollListener.getCurrentPage() == 0 && update) {
+//            mPubMusicScrollListener.setPageSelected(0);
+//        } else {
+//            smoothScrollToPostion(mPubMusicScrollListener.getLayoutManager(), 0);
+//        }
+        smoothScrollToPostion(mPubMusicScrollListener.getLayoutManager(), 0);
+        //Log.d("jiabin", "update:" + update + " | lastPage:" + lastPage);
+        if (lastPage == 0) {
             mPubMusicScrollListener.setPageSelected(0);
-        }else {
-            smoothScrollToPostion(mPubMusicScrollListener.getLayoutManager(), 0);
         }
     }
 
@@ -253,7 +263,7 @@ public class PubMusicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         notifyItemChanged(pos, "payload");
     }
 
-    public void reset(){
+    public void reset() {
         mUserPubMusicMeta = null;
         mRecList.clear();
         mtotalList.clear();

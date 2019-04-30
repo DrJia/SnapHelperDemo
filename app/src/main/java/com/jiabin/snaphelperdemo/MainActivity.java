@@ -175,8 +175,8 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("jiabin", "currentPos:" + currentPos + " | lastPos:" + lastPos);
                 //Toast.makeText(getApplicationContext(), "currentPos:" + currentPos + " | lastPos:" + lastPos, Toast.LENGTH_SHORT).show();
                 adapter.updateActivatingPos(currentPos);
-                adapter.updateCurrentLoading();
-                mockLoading();
+                //adapter.updateCurrentLoading();
+                //mockLoading();
             }
         });
 
