@@ -1,5 +1,7 @@
 package com.jiabin.snaphelperdemo;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearSmoothScroller;
@@ -313,6 +315,27 @@ public class PubMusicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         return null;
     }
 
+    private void startActivatingAnim(View view){
+        Object tag = view.getTag();
+        if(tag instanceof ObjectAnimator){
+            return;
+        }
+        ObjectAnimator animator = ObjectAnimator.ofInt(view,"backgroundColor",0xffff0000,0xff00ff00);
+        animator.setDuration(400);
+        animator.setEvaluator(new ArgbEvaluator());
+        animator.start();
+        view.setTag(animator);
+    }
+
+    private void clearActivatingAnim(View view){
+        Object tag = view.getTag();
+        if(tag instanceof ObjectAnimator){
+            ObjectAnimator animator = (ObjectAnimator) tag;
+            animator.cancel();
+            view.setTag(null);
+        }
+    }
+
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         int viewType = holder.getItemViewType();
@@ -323,9 +346,11 @@ public class PubMusicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             layoutParams.width = mItemWidth;
             PubMusicMeta meta = mtotalList.get(position);
             if (meta.isActivating) {
-                musicViewHolder.itemView.setBackgroundColor(0xff00ff00);
+                //musicViewHolder.itemView.setBackgroundColor(0xff00ff00);
+                startActivatingAnim(musicViewHolder.itemView);
                 musicViewHolder.txt.setSelected(true);
             } else {
+                clearActivatingAnim(musicViewHolder.itemView);
                 musicViewHolder.itemView.setBackgroundColor(0xffff0000);
                 musicViewHolder.txt.setSelected(false);
             }
