@@ -32,12 +32,24 @@
             android:textSize="30dp"
             android:visibility="gone" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recy"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:overScrollMode="never"
-            android:scrollbars="none" />
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recy"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:overScrollMode="never"
+                android:scrollbars="none" />
+
+            <View
+                android:visibility="gone"
+                android:id="@+id/edge_shadow"
+                android:background="#ff00ff"
+                android:layout_width="30px"
+                android:layout_height="match_parent"/>
+        </FrameLayout>
 
     </LinearLayout>
 

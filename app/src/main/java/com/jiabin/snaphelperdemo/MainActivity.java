@@ -18,6 +18,7 @@ import java.util.Random;
 public class MainActivity extends AppCompatActivity {
 
     private RecyclerView mRecy;
+    private View mEdgeShadow;
     private PubMusicAdapter adapter;
     private LinearLayoutManager manager;
     private PubMusicScrollListener mScrollChangeListener;
@@ -37,28 +38,28 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.down_1).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                adapter.updateDownloading(0,true);
+                adapter.updateDownloading(0, true);
             }
         });
 
         findViewById(R.id.undown_1).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                adapter.updateDownloading(0,false);
+                adapter.updateDownloading(0, false);
             }
         });
 
         findViewById(R.id.down_2).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                adapter.updateDownloading(1,true);
+                adapter.updateDownloading(1, true);
             }
         });
 
         findViewById(R.id.undown_2).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                adapter.updateDownloading(1,false);
+                adapter.updateDownloading(1, false);
             }
         });
 
@@ -165,6 +166,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         mRecy = (RecyclerView) findViewById(R.id.recy);
+        mEdgeShadow = findViewById(R.id.edge_shadow);
 
         manager = new LinearLayoutManager(this);
         manager.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -182,6 +184,12 @@ public class MainActivity extends AppCompatActivity {
 
         adapter = new PubMusicAdapter(this, padding, mScrollChangeListener);
 
+        adapter.setDataChangedListener(new PubMusicAdapter.DataChangedListener() {
+            @Override
+            public void onDataChanged(boolean hasData) {
+                mEdgeShadow.setVisibility(hasData ? View.VISIBLE : View.GONE);
+            }
+        });
 
         mRecy.setLayoutManager(manager);
 
@@ -255,18 +263,19 @@ public class MainActivity extends AppCompatActivity {
         return meta;
     }
 
-    private Handler mHandler = new Handler(){
+    private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            switch (msg.what){
+            switch (msg.what) {
                 case 1:
                     adapter.updateCurrentError();
                     break;
             }
         }
     };
-    private void mockLoading(){
-        new Thread(){
+
+    private void mockLoading() {
+        new Thread() {
             @Override
             public void run() {
                 try {

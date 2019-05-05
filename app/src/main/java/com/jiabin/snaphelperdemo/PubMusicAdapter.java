@@ -28,6 +28,7 @@ public class PubMusicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public static final int TYPE_FAKE = 102;
 
     private ItemClickListener mItemClickListener;
+    private DataChangedListener mDataChangedListener;
 
     private TopSmoothScroller topSmoothScroller;
     private TopSmoothScroller0 topSmoothScroller0;
@@ -49,6 +50,10 @@ public class PubMusicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         topSmoothScroller0 = new TopSmoothScroller0(mContext);
     }
 
+    public boolean hasData() {
+        return mtotalList != null && !mtotalList.isEmpty();
+    }
+
     public void setTotalList(@NonNull ArrayList<PubMusicMeta> list) {
         mtotalList = list;
         notifyDataSetChanged();
@@ -59,6 +64,10 @@ public class PubMusicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     public void setRecommandList(@NonNull ArrayList<PubMusicMeta> list) {
+        boolean hasData = false;
+        if (hasData()) {
+            hasData = true;
+        }
         mRecList = list;
         if (mUserPubMusicMeta == null) {
             mtotalList.clear();
@@ -75,6 +84,11 @@ public class PubMusicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         int curPage = mPubMusicScrollListener.getCurrentPage();
         updateActivatingPos(curPage);
         mPubMusicScrollListener.setPageSelected(curPage);
+        if(!hasData){
+            if (mDataChangedListener != null) {
+                mDataChangedListener.onDataChanged(true);
+            }
+        }
     }
 
     public ArrayList<PubMusicMeta> getRecommandList() {
@@ -82,6 +96,10 @@ public class PubMusicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     public void updateUserMusicMeta(@NonNull PubMusicMeta userPubMusicMeta) {
+        boolean hasData = false;
+        if (hasData()) {
+            hasData = true;
+        }
         boolean update;
         int lastPage = mPubMusicScrollListener.getCurrentPage();
         if (mUserPubMusicMeta == null) {
@@ -110,6 +128,11 @@ public class PubMusicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         //Log.d("jiabin", "update:" + update + " | lastPage:" + lastPage);
         if (lastPage == 0) {
             mPubMusicScrollListener.setPageSelected(0);
+        }
+        if(!hasData){
+            if (mDataChangedListener != null) {
+                mDataChangedListener.onDataChanged(true);
+            }
         }
     }
 
@@ -270,6 +293,9 @@ public class PubMusicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         mErrorText = null;
         mLoadingText = null;
         notifyDataSetChanged();
+        if (mDataChangedListener != null) {
+            mDataChangedListener.onDataChanged(false);
+        }
     }
 
     @NonNull
@@ -480,5 +506,14 @@ public class PubMusicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             topSmoothScroller.setTargetPosition(pos);
             layoutManager.startSmoothScroll(topSmoothScroller);
         }
+    }
+
+    public interface DataChangedListener {
+        void onDataChanged(boolean hasData);
+
+    }
+
+    public void setDataChangedListener(DataChangedListener listener) {
+        mDataChangedListener = listener;
     }
 }
