@@ -43,13 +43,14 @@ public class PubMusicScrollListener extends RecyclerView.OnScrollListener {
     @Override
     public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
         super.onScrollStateChanged(recyclerView, newState);
+        Log.d("jiabin", "onScrollStateChanged newState:" + newState + " | mScrolled:" + mScrolled);
         if (newState == RecyclerView.SCROLL_STATE_IDLE && mScrolled) {
             mScrolled = false;
             final int lastPage = mCurrentPage;
             int firstChildPosition = mLayoutManager.findFirstVisibleItemPosition();
             if (firstChildPosition == RecyclerView.NO_POSITION) {
                 mCurrentPage = lastPage;
-            }else {
+            } else {
                 View firstChildView = mLayoutManager.findViewByPosition(firstChildPosition);
                 if (mHorizontalHelper.getDecoratedEnd(firstChildView) >= mHorizontalHelper.getDecoratedMeasurement(firstChildView) / 2 && mHorizontalHelper.getDecoratedEnd(firstChildView) > 0) {
                     mCurrentPage = firstChildPosition;
@@ -65,7 +66,7 @@ public class PubMusicScrollListener extends RecyclerView.OnScrollListener {
         }
     }
 
-    public void setPageSelected(int curPage){
+    public void setPageSelected(int curPage) {
         if (mOnPageChangeCallback != null) {
             mOnPageChangeCallback.onPageSelected(curPage, curPage);
         }

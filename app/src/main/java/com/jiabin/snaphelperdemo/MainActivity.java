@@ -30,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
 
     private RecyclerResizeManager mRecyclerResizeManager;
 
+    boolean mHasData = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -119,6 +121,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        findViewById(R.id.edge).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mHasData){
+                    boolean isVisible = mEdgeShadow.getVisibility() == View.VISIBLE;
+                    mEdgeShadow.setVisibility(isVisible ? View.GONE : View.VISIBLE);
+                }
+            }
+        });
+
         text2 = findViewById(R.id.text2);
 
         findViewById(R.id.text1).setOnClickListener(new View.OnClickListener() {
@@ -187,6 +199,7 @@ public class MainActivity extends AppCompatActivity {
         adapter.setDataChangedListener(new PubMusicAdapter.DataChangedListener() {
             @Override
             public void onDataChanged(boolean hasData) {
+                mHasData = hasData;
                 mEdgeShadow.setVisibility(hasData ? View.VISIBLE : View.GONE);
             }
         });
